@@ -13,7 +13,7 @@ output = zeros(numFrames, 1);
         framestop = framestart + framesize - 1;
 
         input_fft = fft(input(framestart:framestop));
-        
+            
         output(n) = sum( max(abs(input_fft) - abs(previous_fft), 0) );
         
         previous_fft = input_fft;
