@@ -27,6 +27,7 @@ bool notFirstFrame = false;
 float* buffer;
 int bufferSize;
 int writePointer;
+int frameRatio;
 
 float out_1, out_2;
 
@@ -59,6 +60,8 @@ bool setup(BeagleRTContext *context, void *userData)
 	prevAbsFreqDomain = (ne10_float32_t*) NE10_MALLOC (bufferSize * sizeof (ne10_float32_t));
     temp1 = (ne10_float32_t*) NE10_MALLOC (bufferSize * sizeof (ne10_float32_t));
 
+    frameRatio = context->audioFrames / context->analogFrames;
+    
     cfg = ne10_fft_alloc_c2c_float32 (bufferSize);
     out_1 = out_2 = 0;
     writePointer = 0;
@@ -173,6 +176,16 @@ void render(BeagleRTContext *context, void *userData)
 		// float inL = audioReadFrame(context, n, 0);
 		float inR = audioReadFrame(context, n, 1);
 		float out_0;
+        float in0;
+        
+        
+        if (n == 0) {
+            rt_printf("Ana In 0: %f\n", in0);
+        }
+        in0 = analogReadFrame(context, n, 0);
+        rt_printf("Ana In 0: %f\n", inR);
+        
+        
 		buffer[writePointer] = inR;
 
 		// file1.log(inR);	
